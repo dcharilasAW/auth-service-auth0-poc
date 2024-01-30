@@ -1,1 +1,0 @@
-# auth-service-keycloak-poc
