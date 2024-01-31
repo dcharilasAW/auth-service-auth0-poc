@@ -33,8 +33,6 @@ public class AuthController {
     @Autowired
     private AuthConfig config;
 
-    private static final String AUTH0_TOKEN_URL = "https://dev-example.auth0.com/oauth/token";
-
     @GetMapping(value = "/login")
     protected void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String redirectUri = config.getContextPath(request) + "/callback";
@@ -63,13 +61,13 @@ public class AuthController {
         JSONObject requestBody = new JSONObject();
         requestBody.put("client_id", config.getManagementApiClientId());
         requestBody.put("client_secret", config.getManagementApiClientSecret());
-        requestBody.put("audience", "https://dev-example.auth0.com/api/v2/");
+        requestBody.put("audience", "https://" + config.getDomain() +"/api/v2/");
         requestBody.put("grant_type", config.getGrantType());
 
         HttpEntity<String> request = new HttpEntity<String>(requestBody.toString(), headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        HashMap<String, String> result = restTemplate.postForObject(AUTH0_TOKEN_URL, request, HashMap.class);
+        HashMap<String, String> result = restTemplate.postForObject("https://" + config.getDomain() +"/oauth/token", request, HashMap.class);
 
         return result.get("access_token");
     }
