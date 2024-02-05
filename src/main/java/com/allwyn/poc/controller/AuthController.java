@@ -62,6 +62,9 @@ public class AuthController {
         requestBody.put("client_id", config.getManagementApiClientId());
         requestBody.put("client_secret", config.getManagementApiClientSecret());
         requestBody.put("audience", "https://" + config.getDomain() +"/api/v2/");
+        requestBody.put("scope", "read:users read:userByEmail");
+        //TODO if user requests a scope that is not assigned as permission then access is denied to everything
+
         requestBody.put("grant_type", config.getGrantType());
 
         HttpEntity<String> request = new HttpEntity<String>(requestBody.toString(), headers);

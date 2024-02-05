@@ -28,7 +28,7 @@ public class HomeController {
 
             return "Welcome, " + email + "!";
         } else {
-            response.sendRedirect("http://localhost:8080/login");
+            response.sendRedirect("http://localhost:8090/login");
             return null;
         }
     }

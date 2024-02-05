@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ public class UserController {
     private AuthConfig config;
 
     @GetMapping(value="/users")
+    @PreAuthorize("hasAuthority('read:users')")
     @ResponseBody
     public ResponseEntity<String> users(HttpServletRequest request, HttpServletResponse response) throws IOException, IdentityVerificationException {
         ResponseEntity<String> result = apiService.getCall(config.getUsersUrl());
@@ -33,6 +35,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/userByEmail")
+    @PreAuthorize("hasAuthority('read:userByEmail')")
     @ResponseBody
     public ResponseEntity<String> userByEmail(HttpServletResponse response, @RequestParam String email) {
         ResponseEntity<String> result = apiService.getCall(config.getUsersByEmailUrl()+email);

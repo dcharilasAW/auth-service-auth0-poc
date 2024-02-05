@@ -57,6 +57,8 @@ public class AuthConfig {
         http.csrf()
                 .disable()
                 .authorizeRequests()
+                //.antMatchers("/users").hasAuthority("SCOPE_read:users")
+                //.antMatchers("/userByEmail").hasAuthority("SCOPE_read:userByEmail")
                 .antMatchers("/callback", "/login", "/")
                 .permitAll()
                 .anyRequest()
