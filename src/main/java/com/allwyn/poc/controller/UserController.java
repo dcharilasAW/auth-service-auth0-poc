@@ -27,7 +27,7 @@ public class UserController {
     private AuthConfig config;
 
     @GetMapping(value="/users")
-    @PreAuthorize("hasAuthority('read:users')")
+    @PreAuthorize("hasAuthority('users')")
     @ResponseBody
     public ResponseEntity<String> users(HttpServletRequest request, HttpServletResponse response) throws IOException, IdentityVerificationException {
         ResponseEntity<String> result = apiService.getCall(config.getUsersUrl());
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/userByEmail")
-    @PreAuthorize("hasAuthority('read:userByEmail')")
+    @PreAuthorize("hasAuthority('userByEmail')")
     @ResponseBody
     public ResponseEntity<String> userByEmail(HttpServletResponse response, @RequestParam String email) {
         ResponseEntity<String> result = apiService.getCall(config.getUsersByEmailUrl()+email);

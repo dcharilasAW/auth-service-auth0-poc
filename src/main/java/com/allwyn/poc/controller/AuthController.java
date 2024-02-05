@@ -37,7 +37,8 @@ public class AuthController {
     protected void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String redirectUri = config.getContextPath(request) + "/callback";
         String authorizeUrl = authenticationController.buildAuthorizeUrl(request, response, redirectUri)
-                .withScope("openid email")
+                .withAudience("http://localhost:8090")
+                .withScope("openid profile email")
                 .build();
         response.sendRedirect(authorizeUrl);
     }
@@ -49,6 +50,9 @@ public class AuthController {
         DecodedJWT jwt = JWT.decode(tokens.getIdToken());
         TestingAuthenticationToken authToken2 = new TestingAuthenticationToken(jwt.getSubject(), jwt.getToken());
         authToken2.setAuthenticated(true);
+
+        //TODO remove, this is just for testing
+        System.out.println("\n\n Access token: \n" + tokens.getAccessToken() +"\n\n");
 
         SecurityContextHolder.getContext().setAuthentication(authToken2);
         response.sendRedirect(config.getContextPath(request) + "/");
@@ -62,8 +66,6 @@ public class AuthController {
         requestBody.put("client_id", config.getManagementApiClientId());
         requestBody.put("client_secret", config.getManagementApiClientSecret());
         requestBody.put("audience", "https://" + config.getDomain() +"/api/v2/");
-        requestBody.put("scope", "read:users read:userByEmail");
-        //TODO if user requests a scope that is not assigned as permission then access is denied to everything
 
         requestBody.put("grant_type", config.getGrantType());
 
