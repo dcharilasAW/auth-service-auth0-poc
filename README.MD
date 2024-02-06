@@ -25,6 +25,9 @@ In our case we need a single API to secure all our operations. The API's identif
 
 ![img_3.png](img_3.png)
 
+5. Enable MFA (optionally)
+
+Go to Multi-factor Authentication, enable "One-time Password" and change "Require Multi-factor Auth" to "Always".
 
 # Resources (Operations)
 
