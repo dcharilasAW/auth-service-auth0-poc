@@ -3,7 +3,15 @@
 Code copied from: https://github.com/eugenp/tutorials/tree/master/spring-security-modules/spring-security-auth0  
 See guide: https://www.baeldung.com/spring-security-auth0
 
-Auth0 Users API: https://auth0.com/docs/api/management/v2/users/get-users
+# Auth0 tutorials
+
+Auth0 User Management API: https://auth0.com/docs/api/management/v2/users/get-users  
+Token revocation: https://auth0.com/docs/secure/tokens/revoke-tokens  
+Get access token: https://auth0.com/docs/secure/tokens/access-tokens/get-access-tokens  
+Get refresh token: https://auth0.com/docs/secure/tokens/refresh-tokens/get-refresh-tokens
+MFA: https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors
+
+Note that grant type "client_credentials" does not return refresh token.
 
 # Auth0 configuration
 
