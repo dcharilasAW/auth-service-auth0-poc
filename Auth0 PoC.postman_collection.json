@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "ccf06f24-196d-40f5-8091-dd1b76298b69",
+		"name": "Auth0 PoC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "403490"
+	},
+	"item": [
+		{
+			"name": "Get management access token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var bodyToken = responseJson.access_token;",
+							"pm.environment.set(\"access_token\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"audience\": \"https://{{domain}}/api/v2/\",\n    \"client_id\": \"{{mgmt_client_id}}\",\n    \"client_secret\": \"{{mgmt_client_secret}}\",\n    \"grant_type\": \"{{grant_type}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{domain}}/oauth/token",
+					"protocol": "https",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user access token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var bodyToken = responseJson.access_token;",
+							"pm.environment.set(\"access_token\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"audience\": \"http://localhost:8090\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"grant_type\": \"{{grant_type}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{domain}}/oauth/token",
+					"protocol": "https",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "audience",
+							"value": "http://localhost:8090",
+							"disabled": true
+						},
+						{
+							"key": "scope",
+							"value": "openid profile email",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{domain}}/api/v2/users",
+					"protocol": "https",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var bodyToken = responseJson[0].user_id;",
+							"pm.environment.set(\"user_id\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{domain}}/api/v2/users-by-email?email={{user_email}}",
+					"protocol": "https",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users-by-email"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "{{user_email}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user permissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var bodyToken = responseJson.user_id;",
+							"pm.environment.set(\"user_id\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{domain}}/api/v2/users/{{user_id}}/permissions",
+					"protocol": "https",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"users",
+						"{{user_id}}",
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test get users API",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNJYXpWbE5YamFpV0ZoZzRSLW83WiJ9.eyJpc3MiOiJodHRwczovL2Rldi1oaGFocnpuaTN0NnR2MXNsLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NWMwYTI1NmMxYTBlNjMxZTkyNDFlNGYiLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDkwIiwiaHR0cHM6Ly9kZXYtaGhhaHJ6bmkzdDZ0djFzbC5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA3MTQ2ODAzLCJleHAiOjE3MDcyMzMyMDMsImF6cCI6Ik9VWTBuOUx3RkVGaUx1cW53azFpeGtWSUFsUmRLMUlTIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbInVzZXJCeUVtYWlsIiwidXNlcnMiXX0.qzSzIVxfUYB0cd56LX1pf4H85i2zSHCYhcLuNUYkLP4hu4csgVu7pqS8dBDY4eOdXxOF6P-bosvRdmhj-96B_ujuLR5sC3tX6sWpqzNKvPoo_RjcuHpb2YMSP1eFvqK2aLjiJroUDIpaKtOslicpjwYVha4gD9jouePgwkp1x8oeGEWzyhQ21pt8tm5QKdpHatfWbDOKanrjPFyh4NOE3pRSsheJUg5yYTBtD8vnTrMgwmDzSsmkF5pfF4mlqZZQtdVIjSXEtog8uOEUoFDOy61VZrwVKfNOKWwGUAq4OIlwF7p0ZAHx8HcN2JQ4M6P6cWVQ6eUrOcrFYo1Yj4Y-rA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test get user by email API",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNJYXpWbE5YamFpV0ZoZzRSLW83WiJ9.eyJpc3MiOiJodHRwczovL2Rldi1oaGFocnpuaTN0NnR2MXNsLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NWMwYTI1NmMxYTBlNjMxZTkyNDFlNGYiLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDkwIiwiaHR0cHM6Ly9kZXYtaGhhaHJ6bmkzdDZ0djFzbC5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzA3MTQ2ODAzLCJleHAiOjE3MDcyMzMyMDMsImF6cCI6Ik9VWTBuOUx3RkVGaUx1cW53azFpeGtWSUFsUmRLMUlTIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbInVzZXJCeUVtYWlsIiwidXNlcnMiXX0.qzSzIVxfUYB0cd56LX1pf4H85i2zSHCYhcLuNUYkLP4hu4csgVu7pqS8dBDY4eOdXxOF6P-bosvRdmhj-96B_ujuLR5sC3tX6sWpqzNKvPoo_RjcuHpb2YMSP1eFvqK2aLjiJroUDIpaKtOslicpjwYVha4gD9jouePgwkp1x8oeGEWzyhQ21pt8tm5QKdpHatfWbDOKanrjPFyh4NOE3pRSsheJUg5yYTBtD8vnTrMgwmDzSsmkF5pfF4mlqZZQtdVIjSXEtog8uOEUoFDOy61VZrwVKfNOKWwGUAq4OIlwF7p0ZAHx8HcN2JQ4M6P6cWVQ6eUrOcrFYo1Yj4Y-rA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/userByEmail?email=admin@admin.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"userByEmail"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "admin@admin.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
