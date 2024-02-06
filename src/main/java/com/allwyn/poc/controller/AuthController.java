@@ -52,7 +52,7 @@ public class AuthController {
         authToken2.setAuthenticated(true);
 
         //TODO remove, this is just for testing
-        System.out.println("\n\n Access token: \n" + tokens.getAccessToken() +"\n\n");
+        System.out.println("\n\n Access token: \n Bearer " + tokens.getAccessToken() +"\n\n");
 
         SecurityContextHolder.getContext().setAuthentication(authToken2);
         response.sendRedirect(config.getContextPath(request) + "/");
