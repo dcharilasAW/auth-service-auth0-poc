@@ -51,6 +51,18 @@ Roles are configured in Auth0.
 
 [Auth Server PoC.postman_collection.json](Auth Server PoC.postman_collection.json)
 
+The following environment variables need to be created:
+- client_id
+- client_secret
+- access_token (leave empty)
+- client_credentials
+- domain
+- mgmt_client_id
+- mgmt_client_secret
+- grant_type
+- user_email
+- user_id (leave empty)
+
 # Usage
 
 - Fill your client details in `application.properties`.
